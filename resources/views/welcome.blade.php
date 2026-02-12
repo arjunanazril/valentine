@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine? 💖</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'love-pink': '#FF69B4',
+                        'deep-red': '#D61C4E',
+                        'cream': '#FFF5E4',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* CSS Tambahan buat Animasi Background & Font */
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@700;900&display=swap');
+        
+        [x-cloak] { display: none !important; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center relative">
+
+    <div class="absolute top-10 left-10 text-6xl animate-bounce opacity-60">☁️</div>
+    <div class="absolute bottom-20 right-10 text-6xl animate-bounce opacity-60" style="animation-delay: 1s;">☁️</div>
+    <div class="absolute top-20 right-20 text-4xl animate-pulse text-white opacity-80">✨</div>
+    <div class="absolute bottom-10 left-20 text-5xl animate-float">💖</div>
+    <div class="absolute top-1/2 left-10 text-4xl animate-wiggle">💌</div>
+    <div class="absolute top-10 left-1/2 text-5xl animate-float" style="animation-delay: 2s;">🎀</div>
+
+    <div x-data="{ 
+            open: false, 
+            rejected: false,
+            celebrate() {
+                this.open = true;
+                var duration = 3 * 1000;
+                var end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({
+                        particleCount: 5,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#ff0000', '#ffffff']
+                    });
+                    confetti({
+                        particleCount: 5,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#ff0000', '#ffffff']
+                    });
+            
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+            }
+         }" 
+         class="relative z-10 w-full max-w-md px-4">
+        
+        <div class="glass-panel rounded-[3rem] p-8 text-center transform hover:scale-105 transition duration-500">
+            
+            <div class="relative -mt-20 mb-6">
+                <div class="w-48 h-48 mx-auto rounded-full bg-white/50 p-2 shadow-xl backdrop-blur-sm animate-float">
+                    <template x-if="!open">
+                        <img src="{{ asset('ayang.jpg') }}" class="w-full h-full object-cover rounded-full" alt="Foto Ayang">
+                    </template>
+                    <template x-if="open">
+                        <img src="{{ asset('ayang.jpg') }}" class="w-full h-full object-cover rounded-full" alt="Foto Ayang">
+                    </template>
+                </div>
+            </div>
+
+            <div x-show="!open" x-transition:leave="transition ease-in duration-300 opacity-0 scale-90">
+                <h1 class="font-['Pacifico'] text-5xl text-white drop-shadow-lg mb-2 rotate-[-3deg]">
+                    Hi, Manis!
+                </h1>
+                
+                <div class="bg-white/30 rounded-xl p-4 mb-6 border border-white/50">
+                    <p class="text-white font-bold text-lg leading-relaxed drop-shadow-md">
+                        Aku mau nanya sesuatu...<br>
+                        <span class="text-yellow-300 text-2xl font-black block mt-1 uppercase tracking-wider">Will you be my Valentine?</span>
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-3 items-center w-full px-4">
+                    <button 
+                        @click="celebrate()"
+                        class="w-full bg-white text-love-pink font-black text-xl py-4 rounded-full shadow-lg hover:bg-pink-50 hover:shadow-xl hover:-translate-y-1 transition-all border-4 border-pink-200">
+                        MAU BANGET! 😍
+                    </button>
+                    
+                    <div class="w-full h-14 relative">
+                        <button 
+                            x-show="!rejected"
+                            @click="rejected = true"
+                            class="w-full bg-black/20 text-white font-bold py-3 rounded-full hover:bg-black/30 transition border border-white/20">
+                            Gak dulu deh...
+                        </button>
+
+                        <button 
+                            x-show="rejected"
+                            x-cloak
+                            @click="celebrate()"
+                            x-transition:enter="transition duration-500 transform cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+                            x-transition:enter-start="scale-0 rotate-180"
+                            class="absolute inset-0 w-full bg-gradient-to-r from-red-500 to-pink-600 text-white font-black text-xl py-3 rounded-full shadow-lg border-4 border-white animate-wiggle">
+                            HARUS MAU!! 😡❤️
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="open" x-cloak x-transition class="mt-4">
+                <h2 class="font-['Pacifico'] text-5xl text-white drop-shadow-lg mb-2">YAAAY! 🎉</h2>
+                <p class="text-white font-bold text-xl drop-shadow-md">Makasih udah mau! 💖</p>
+                <div class="mt-6 bg-white/20 rounded-lg p-4 backdrop-blur-sm">
+                    <p class="text-white text-sm font-semibold">Jangan lupa screenshot & kirim ke aku ya!</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
