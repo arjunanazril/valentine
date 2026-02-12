@@ -1,8 +1,5 @@
 {
     "version": 2,
     "framework": "laravel",
-    "outputDirectory": "public",
-    "commands": {
-        "build": "npm install && npm run build && php artisan config:cache && php artisan route:cache"
-    }
+    "outputDirectory": "public"
 }
